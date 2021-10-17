@@ -1,20 +1,51 @@
 import React, { useState } from "react";
+import { Redirect} from "react-router-dom";
+import { connect } from "react-redux";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 
+import { register } from "../../../store/utils/thunkCreators";
 
-const RegisterPage = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+const RegisterPage = (props) => {
+  // const history = useHistory();
+  const { user, register } = props;
+  const [formErrorMessage, setFormErrorMessage] = useState({});
 
+  const onSubmitHandler = async (event) => {
+    event.preventDefault();
+    const username = event.target.username.value;
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+    const confirmPassword = event.target.confirmPassword.value;
+
+    if (password !== confirmPassword) {
+      setFormErrorMessage({ confirmPasswordMsg: "Passwords must match!" });
+      return;
+    }
+
+    await register({ username, email, password });
+  };
+
+    if (user?.id) {
+      return <Redirect to="/home" />;
+    }
 
   return (
     <Container>
-      <Form
-      //  onSubmit=       {onSubmitHandler}
-      >
-        <Form.Group className="mb-3" controlId="formBasicEmail">
+      <Form onSubmit={onSubmitHandler}>
+        <Form.Group className="mb-3" controlId="formUsername">
+          <Form.Label>Username</Form.Label>
+          <Form.Control
+            type="text"
+            name="username"
+            placeholder="User name"
+            required
+            title="This field should not be left blank."
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
             type="email"
@@ -27,7 +58,7 @@ const RegisterPage = () => {
           </Form.Text>
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formBasicPassword">
+        <Form.Group className="mb-3" controlId="formPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
             type="password"
@@ -36,15 +67,45 @@ const RegisterPage = () => {
             required
           />
         </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicCheckbox">
-          <Form.Check type="checkbox" label="Check me out" />
+
+        <Form.Group className="mb-3" controlId="formConfirmPassword">
+          <Form.Label>Confirm Password</Form.Label>
+          <Form.Control
+            isInvalid={!!formErrorMessage.confirmPasswordMsg}
+            type="password"
+            name="confirmPassword"
+            placeholder="Please Confirm Password"
+            required
+          />
+          <Form.Text className="text-danger">
+            {formErrorMessage.confirmPasswordMsg}
+          </Form.Text>
         </Form.Group>
+
+        {/* <Form.Group className="mb-3" controlId="formCheckbox">
+          <Form.Check type="checkbox" label="Check me out" />
+        </Form.Group> */}
+
         <Button variant="primary" type="submit">
-          Submit
+          Register
         </Button>
       </Form>
     </Container>
   );
 };
 
-export default RegisterPage;
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    register: (credentials) => {
+      dispatch(register(credentials));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterPage);

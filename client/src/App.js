@@ -1,6 +1,6 @@
 import "./App.css";
 import NavbarTop from "./components/particles/NavbarTop";
-import { HashRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import RegisterPage from "./components/pages/RegisterPage";
