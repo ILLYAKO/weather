@@ -1,9 +1,16 @@
-import { GET_USER } from "./types";
+import { SET_USER, CHECK_AUTH } from "./types";
+
 // const SET_FETCHING_STATUS = "SET_FETCHING_STATUS";
 
-export const getUser = (user) => {
+export const setUser = (user) => {
   return {
-    type: GET_USER,
+    type: SET_USER,
     user,
+  };
+};
+export const setAuth = (isAuthorized) => {
+  return {
+    type: CHECK_AUTH,
+    isAuthorized,
   };
 };
