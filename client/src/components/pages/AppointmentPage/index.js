@@ -1,121 +1,157 @@
-import React from "react";
+import React, { useRef } from "react";
 
-const AppointmentPage = () => {
+const AppointmentPage = (props) => {
+   const form = useRef(null);
+
+  const onSubmitHandler = (event) => {
+    event.preventDefault();
+    const appointmentForm = new FormData(form.current);
+    // console.log("appointmentForm", appointmentForm);
+    // // Display the key/value pairs
+    // for (var pair of appointmentForm.entries()) {
+    //   console.log(pair);
+    //   console.log(pair[0] + ": " + pair[1]);
+    // }
+  };
+
   return (
-    <div class="container  pb-5">
-      <div class="py-5 text-center">
+    <div className="container  pb-5">
+      <div className="py-5 text-center">
         <h3>Booking form</h3>
-        <p class="lead">Please fill some fields.</p>
+        <p className="lead">Please fill some fields.</p>
       </div>
 
-      <div class="col-md-7 col-lg-8 ">
-        <form class="needs-validation" novalidate>
-          <div class="row g-3">
-            <div class="col-sm-6">
-              <label for="firstName" class="form-label">
+      <div className="col-md-7 col-lg-8 ">
+        {/* <form className="needs-validation" novalidate> */}
+        <form
+          className="needs-validation"
+          id="appointmentFormId"
+          name="appointmentForm"
+          ref={form}
+          onSubmit={onSubmitHandler}
+        >
+          <div className="row g-3">
+            <div className="col-sm-6">
+              <label htmlFor="firstName" className="form-label">
                 First name
               </label>
               <input
                 type="text"
-                class="form-control"
+                className="form-control"
                 id="firstName"
+                name="firstName"
                 placeholder=""
                 //   value=""
                 required
               />
-              <div class="invalid-feedback">Valid first name is required.</div>
+              <div className="invalid-feedback">
+                Valid first name is required.
+              </div>
             </div>
 
-            <div class="col-sm-6">
-              <label for="lastName" class="form-label">
+            <div className="col-sm-6">
+              <label htmlFor="lastName" className="form-label">
                 Last name
               </label>
               <input
                 type="text"
-                class="form-control"
+                className="form-control"
                 id="lastName"
+                name="lastName"
                 placeholder=""
                 //   value=""
                 required
               />
-              <div class="invalid-feedback">Valid last name is required.</div>
+              <div className="invalid-feedback">
+                Valid last name is required.
+              </div>
             </div>
 
-            <div class="col-12">
-              <label for="email" class="form-label">
-                Email <span class="text-muted">(Optional)</span>
+            <div className="col-12">
+              <label htmlFor="email" className="form-label">
+                Email <span className="text-muted">(Optional)</span>
               </label>
               <input
                 type="email"
-                class="form-control"
+                className="form-control"
                 id="email"
                 placeholder="you@example.com"
               />
-              <div class="invalid-feedback">
+              <div className="invalid-feedback">
                 Please enter a valid email address for shipping updates.
               </div>
             </div>
 
-            <div class="col-12">
-              <label for="telephone" class="form-label">
-                Telephone <span class="text-muted">(Optional)</span> Tel.
+            <div className="col-12">
+              <label htmlFor="telephone" className="form-label">
+                Telephone <span className="text-muted">(Optional)</span> Tel.
                 format: 416-392-2489
               </label>
               <input
                 type="tel"
-                class="form-control"
+                className="form-control"
                 id="telephone"
                 placeholder="XXX-XXX-XXXX"
                 pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
               />
-              <div class="invalid-feedback">Please enter your telephone.</div>
+              <div className="invalid-feedback">
+                Please enter your telephone.
+              </div>
             </div>
 
-            <div class="col-12">
-              <label for="address" class="form-label">
-                Address <span class="text-muted">(Optional)</span>
+            <div className="col-12">
+              <label htmlFor="address" className="form-label">
+                Address <span className="text-muted">(Optional)</span>
               </label>
               <input
                 type="text"
-                class="form-control"
+                className="form-control"
                 id="address"
                 placeholder="1234 Main St, City"
               />
-              <div class="invalid-feedback">Please enter your address.</div>
+              <div className="invalid-feedback">Please enter your address.</div>
             </div>
-            <div class="row">
-              <label class="form-label">
+            <div className="row">
+              <label className="form-label">
                 Choose a day and time for meeting:
               </label>
-              <div class="col-sm-6">
-                <select class="form-control" id="timePicker" name="timePicker">
-                  <option value="06:40">06:40</option>
-                  <option value="08:24">08:24</option>
-                  <option value="12:31:30">12:31:30 </option>
-                  <option value="23:59:59.999">23:59:59.999</option>
+              <div className="col-sm-6">
+                <select
+                  className="form-control"
+                  id="timePicker"
+                  name="timePicker"
+                  required
+                >
+                  <option value="">Please choose a time</option>
+                  <option value="09:00 AM">09:00 AM</option>
+                  <option value="09:30 AM">09:30 AM</option>
+                  <option value="10:00 AM">10:00 AM</option>
+                  <option value="10:30 AM">10:30 AM</option>
                 </select>
-                <small>Office hours are 9am to 6pm</small>
-                <div class="invalid-feedback">Valid time is required.</div>
+                <small>Office hours are 9:00am to 6:00pm</small>
+                <div className="invalid-feedback">Valid time is required.</div>
               </div>
 
-              <div class="col-sm-6">
+              <div className="col-sm-6">
                 <input
                   type="date"
-                  class="form-control"
+                  className="form-control"
                   id="dayPicker"
                   name="dayPicker"
+                  required
                 />
                 <small>Working week is Monday to Friday</small>
 
-                <div class="invalid-feedback">Valid time is required.</div>
+                <div className="invalid-feedback">Valid time is required.</div>
               </div>
             </div>
-            <div class="col-12">
-              <label for="customerProblem" class="form-label">
-                What is a problem? <span class="text-muted">(Optional)</span>
+            <div className="col-12">
+              <label htmlFor="customerProblem" className="form-label">
+                What is a problem?{" "}
+                <span className="text-muted">(Optional)</span>
               </label>
               <textarea
-                class="form-control"
+                className="form-control"
                 id="customerProblem"
                 name="customerProblem"
                 placeholder=" Please type your problem here.
@@ -124,11 +160,11 @@ const AppointmentPage = () => {
                 cols="50"
               />
 
-              <div class="invalid-feedback">Please enter your address.</div>
+              <div className="invalid-feedback">Please enter your address.</div>
             </div>
           </div>
 
-          <button class="w-100 btn btn-primary btn-lg mt-3" type="submit">
+          <button className="w-100 btn btn-primary btn-lg mt-3" type="submit">
             Continue to booking
           </button>
         </form>

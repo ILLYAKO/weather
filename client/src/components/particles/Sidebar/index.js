@@ -3,17 +3,17 @@ import { Link } from "react-router-dom";
 
 const Sidebar = () => {
   return (
-    <nav class="nav flex-column">
-      <Link to="/appointment" class="nav-link active" aria-current="page">
+    <nav className="nav flex-column">
+      <Link to="/appointment" className="nav-link active" aria-current="page">
         Appointment
       </Link>
-      <Link to="/" class="nav-link">
+      <Link to="/" className="nav-link">
         Link
       </Link>
-      <Link to="/" class="nav-link">
+      <Link to="/" className="nav-link">
         Link
       </Link>
-      <Link to="/" class="nav-link disabled" tabindex="-1" aria-disabled="true">
+      <Link to="/" className="nav-link disabled" tabIndex="-1" aria-disabled="true">
         Disabled
       </Link>
     </nav>
