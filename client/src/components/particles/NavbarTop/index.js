@@ -14,7 +14,7 @@ const NavbarTop = (props) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/">
+        <Link to="/" className="navbar-brand">
           Weather
         </Link>
         <button
@@ -31,25 +31,25 @@ const NavbarTop = (props) => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to="#">
+              <Link to="#" className="nav-link active" aria-current="page">
                 Home
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/register">
+              <Link to="/register" className="nav-link">
                 Register
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/login">
+              <Link to="/login" className="nav-link">
                 Login
               </Link>
             </li>
 
             <li className="nav-item">
               <Link
-                className="nav-link"
                 to="/"
+                className="nav-link"
                 onClick={() => {
                   logout();
                 }}
@@ -60,8 +60,8 @@ const NavbarTop = (props) => {
 
             <li className="nav-item dropdown">
               <Link
-                className="nav-link dropdown-toggle"
                 to="#"
+                className="nav-link dropdown-toggle"
                 id="navbarDropdown"
                 role="button"
                 data-bs-toggle="dropdown"
@@ -71,12 +71,12 @@ const NavbarTop = (props) => {
               </Link>
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                 <li>
-                  <Link className="dropdown-item" to="#">
+                  <Link to="#" className="dropdown-item">
                     Action
                   </Link>
                 </li>
                 <li>
-                  <Link className="dropdown-item" to="#">
+                  <Link to="#" className="dropdown-item">
                     Another action
                   </Link>
                 </li>
@@ -84,14 +84,14 @@ const NavbarTop = (props) => {
                   <hr className="dropdown-divider" />
                 </li>
                 <li>
-                  <Link className="dropdown-item" to="#">
+                  <Link to="#" className="dropdown-item">
                     Something else here
                   </Link>
                 </li>
               </ul>
             </li>
             <li className="nav-item">
-              <Link className="nav-link disabled">Disabled</Link>
+              <Link to="/" className="nav-link disabled">Disabled</Link>
             </li>
           </ul>
           <form className="d-flex">
@@ -110,6 +110,7 @@ const NavbarTop = (props) => {
     </nav>
   );
 };
+
 
 const mapDispatchToProps = (dispatch) => {
   return {

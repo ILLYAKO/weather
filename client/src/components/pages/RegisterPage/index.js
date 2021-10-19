@@ -8,8 +8,7 @@ import Container from "react-bootstrap/Container";
 import { register } from "../../../store/utils/thunkCreators";
 
 const RegisterPage = (props) => {
-  // const history = useHistory();
-  const { user, register } = props;
+  const { user, register, isLoading, error } = props;
   const [formErrorMessage, setFormErrorMessage] = useState({});
 
   const onSubmitHandler = async (event) => {
@@ -28,12 +27,13 @@ const RegisterPage = (props) => {
   };
 
     if (user?.id) {
-      return <Redirect to="/home" />;
+      return <Redirect to="/" />;
     }
 
   return (
     <Container>
       <Form onSubmit={onSubmitHandler}>
+        {error && <h3 className="text-danger">Try again.</h3>}
         <Form.Group className="mb-3" controlId="formUsername">
           <Form.Label>Username</Form.Label>
           <Form.Control
@@ -86,8 +86,19 @@ const RegisterPage = (props) => {
           <Form.Check type="checkbox" label="Check me out" />
         </Form.Group> */}
 
-        <Button variant="primary" type="submit">
-          Register
+        <Button variant="primary" type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>{" "}
+              Loading ...
+            </>
+          ) : (
+            "Register"
+          )}
         </Button>
       </Form>
     </Container>
@@ -97,6 +108,8 @@ const RegisterPage = (props) => {
 const mapStateToProps = (state) => {
   return {
     user: state.userReducer.user,
+    isLoading: state.userReducer.isLoading,
+    error: state.userReducer.error,
   };
 };
 

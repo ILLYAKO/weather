@@ -1,17 +1,22 @@
 import React from "react";
-import Nav from "react-bootstrap/Nav";
-
+import { Link } from "react-router-dom";
 
 const Sidebar = () => {
   return (
-    <Nav defaultActiveKey="/home" className="flex-column">
-      <Nav.Link href="/home">Active</Nav.Link>
-      <Nav.Link eventKey="link-1">Link</Nav.Link>
-      <Nav.Link eventKey="link-2">Link</Nav.Link>
-      <Nav.Link eventKey="disabled" disabled>
+    <nav class="nav flex-column">
+      <Link to="/appointment" class="nav-link active" aria-current="page">
+        Appointment
+      </Link>
+      <Link to="/" class="nav-link">
+        Link
+      </Link>
+      <Link to="/" class="nav-link">
+        Link
+      </Link>
+      <Link to="/" class="nav-link disabled" tabindex="-1" aria-disabled="true">
         Disabled
-      </Nav.Link>
-    </Nav>
+      </Link>
+    </nav>
   );
 };
 

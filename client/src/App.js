@@ -11,9 +11,11 @@ import LoginPage from "./components/pages/LoginPage";
 import { checkAuth } from "./store/utils/thunkCreators";
 import Sidebar from "./components/particles/Sidebar";
 import Footer from "./components/particles/Footer";
+import AppointmentPage from "./components/pages/AppointmentPage";
 
 function App(props) {
-  const { checkAuth } = props;
+
+  const {  checkAuth } = props;
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -28,10 +30,10 @@ function App(props) {
         <div className="container">
           <div className="row">
             <NavbarTop />
-            <div className="col-12 col-md-2 bg-danger">
+            <div className="col-12 col-md-2 ">
               <Sidebar />
             </div>
-            <div className="col bg-primary">
+            <div className="col ">
               <Switch>
                 <Route exact path="/">
                   <HomePage />
@@ -41,6 +43,9 @@ function App(props) {
                 </Route>
                 <Route path="/login">
                   <LoginPage />
+                </Route>
+                <Route path="/appointment">
+                  <AppointmentPage />
                 </Route>
               </Switch>
             </div>

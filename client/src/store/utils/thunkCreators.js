@@ -1,29 +1,47 @@
 import $api from "./http";
-import { setUser, setAuth } from "../actions/userActions";
+import {
+  loadingUser,
+  getUser,
+  errorUser,
+  setAuth,
+} from "../actions/userActions";
 
 export const register = (credentials) => async (dispatch) => {
   try {
+    dispatch(loadingUser());
     const { data } = await $api.post("/user/register", credentials);
     localStorage.setItem("token", data?.accessToken);
-    await dispatch(setAuth(true));
-    dispatch(setUser(data?.user));
-  } catch (error) {
-    console.error(error);
-    dispatch(setUser({ error: error.response.data.error || "Server Error" }));
+
+    setTimeout(() => {
+      // dispatch(setAuth(true));
+      dispatch(getUser(data?.user));
+    }, 500);
+
+    // await dispatch(setAuth(true));
+    // dispatch(getUser(data?.user));
+  } catch (err) {
+    console.error(err);
+    dispatch(errorUser({ error: err?.response.data.error || "Server Error" }));
   }
 };
 
 export const login = (credentials) => async (dispatch) => {
   try {
+    dispatch(loadingUser());
     const { data } = await $api.post("/user/login", credentials);
     //?
     localStorage.setItem("token", data.accessToken);
     //?
-    await dispatch(setAuth(true));
-    await dispatch(setUser(data.user));
-  } catch (error) {
-    console.error(error);
-    dispatch(setUser({ error: error.response.data.error || "Server Error" }));
+    setTimeout(() => {
+      console.log("Timeout");
+      dispatch(setAuth(true));
+      dispatch(getUser(data?.user));
+    }, 3000);
+    // await dispatch(setAuth(true));
+    // dispatch(getUser(data?.user));
+  } catch (err) {
+    console.error(err);
+    dispatch(errorUser({ error: err?.response.data.error || "Server Error" }));
   }
 };
 
@@ -31,10 +49,11 @@ export const logout = () => async (dispatch) => {
   try {
     await $api.post("/user/logout");
     localStorage.removeItem("token");
-    await dispatch(setUser({}));
+    await dispatch(getUser({}));
     await dispatch(setAuth(false));
-  } catch (e) {
-    console.log("Server error: ", e.response?.data?.messge);
+  } catch (err) {
+    console.error(err);
+    dispatch(errorUser({ error: err?.response.data.error || "Server Error" }));
   }
 };
 
@@ -43,9 +62,10 @@ export const checkAuth = () => async (dispatch) => {
   try {
     const { data } = await $api.get("/user/refresh");
     await localStorage.setItem("token", data.accessToken);
-    await dispatch(setUser(data.user));
+    await dispatch(getUser(data.user));
     await dispatch(setAuth(true));
-  } catch (e) {
-    console.log("Server error: ", e.response?.data?.messge);
+  } catch (err) {
+    console.error(err);
+    dispatch(errorUser({ error: err?.response.data.error || "Server Error" }));
   }
 };

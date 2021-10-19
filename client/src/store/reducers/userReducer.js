@@ -1,4 +1,10 @@
-import { SET_USER, CHECK_AUTH, USER_LOGOUT } from "../actions/types";
+import {
+  USER_GET,
+  CHECK_AUTH,
+  USER_LOGOUT,
+  USER_LOADING,
+  USER_ERROR,
+} from "../actions/types";
 
 const initialState = {
   user: {},
@@ -9,14 +15,45 @@ const initialState = {
 
 export const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_USER: {
-      return { ...state, user: action.user };
+    case USER_LOADING: {
+      return {
+        ...state,
+        user: {},
+        isAuthorized: false,
+        isLoading: true,
+        error: null,
+      };
     }
+    case USER_GET: {
+      return {
+        ...state,
+        user: action.user,
+        isAuthorized: true,
+        isLoading: false,
+        error: null,
+      };
+    }
+    case USER_ERROR: {
+      return {
+        ...state,
+        user: {},
+        isAuthorized: false,
+        isLoading: false,
+        error: action.errorMsg,
+      };
+    }
+
     case USER_LOGOUT: {
-      return { ...state, isAuthorized: action.isAuthorized, user: action.user };
+      return {
+        ...state,
+        user: {},
+        isAuthorized: false,
+        isLoading: false,
+        error: null,
+      };
     }
     case CHECK_AUTH: {
-      return { ...state, isAuthorized: action.isAuthorized };
+      return { ...state, isAuthorized: action.isAuthorized, error: null };
     }
     default:
       return state;

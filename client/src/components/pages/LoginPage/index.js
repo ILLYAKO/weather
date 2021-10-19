@@ -8,7 +8,8 @@ import Container from "react-bootstrap/Container";
 import { login } from "../../../store/utils/thunkCreators";
 
 const LoginPage = (props) => {
-  const { user, isAuthorized, login } = props;
+  const { user, login, isLoading, error } = props;
+  console.log(error);
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
@@ -18,12 +19,13 @@ const LoginPage = (props) => {
   };
 
   if (user?.id) {
-    return <Redirect to="/home" />;
+    return <Redirect to="/" />;
   }
 
   return (
     <Container>
       <Form onSubmit={onSubmitHandler}>
+        {error && <h3 className="text-danger">Try again.</h3>}
         <Form.Group className="mb-3" controlId="formEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
@@ -44,18 +46,32 @@ const LoginPage = (props) => {
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit">
-          Login
+        <Button variant="primary" type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <span
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>{" "}
+              Loading ...
+            </>
+          ) : (
+            "Login"
+          )}
         </Button>
       </Form>
     </Container>
   );
 };
 
+
 const mapStateToProps = (state) => {
   console.log("state:", state);
   return {
     user: state.userReducer.user,
+    isLoading: state.userReducer.isLoading,
+    error: state.userReducer.error,
   };
 };
 

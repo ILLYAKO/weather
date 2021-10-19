@@ -1,13 +1,25 @@
-import { SET_USER, CHECK_AUTH } from "./types";
+import { USER_GET, CHECK_AUTH, USER_LOADING, USER_ERROR } from "./types";
 
 // const SET_FETCHING_STATUS = "SET_FETCHING_STATUS";
 
-export const setUser = (user) => {
+export const getUser = (user) => {
   return {
-    type: SET_USER,
+    type: USER_GET,
     user,
   };
 };
+export const loadingUser = () => {
+  return {
+    type: USER_LOADING,
+  };
+};
+export const errorUser = (errorMsg) => {
+  return {
+    type: USER_ERROR,
+    errorMsg,
+  };
+};
+
 export const setAuth = (isAuthorized) => {
   return {
     type: CHECK_AUTH,
