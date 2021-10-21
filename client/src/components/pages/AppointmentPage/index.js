@@ -1,17 +1,33 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+import { connect } from "react-redux";
+import { appointmentCreate } from "../../../store/utils/thunkCreators";
+import './style.css'
 
 const AppointmentPage = (props) => {
-   const form = useRef(null);
+  const { appointment, isLoading, error, appointmentCreate } = props;
+  // const form = useRef(null);
+  const [apointmentForm, setApointmentForm] = useState({});
 
-  const onSubmitHandler = (event) => {
+  function handleChange(event) {
+    const value = event.target.value;
+    setApointmentForm({
+      ...apointmentForm,
+      [event.target.name]: value,
+    });
+  }
+
+  const onSubmitHandler = async (event) => {
     event.preventDefault();
-    const appointmentForm = new FormData(form.current);
-    // console.log("appointmentForm", appointmentForm);
+    // const aForm = new FormData(form.current);
+    // const appointment = JSON.stringify(Object.fromEntries(aForm));
+    const appointment = apointmentForm;
     // // Display the key/value pairs
     // for (var pair of appointmentForm.entries()) {
     //   console.log(pair);
     //   console.log(pair[0] + ": " + pair[1]);
     // }
+    console.log("apointmentForm", apointmentForm);
+    await appointmentCreate(appointment);
   };
 
   return (
@@ -27,7 +43,7 @@ const AppointmentPage = (props) => {
           className="needs-validation"
           id="appointmentFormId"
           name="appointmentForm"
-          ref={form}
+          // ref={form}
           onSubmit={onSubmitHandler}
         >
           <div className="row g-3">
@@ -42,6 +58,7 @@ const AppointmentPage = (props) => {
                 name="firstName"
                 placeholder=""
                 //   value=""
+                onChange={handleChange}
                 required
               />
               <div className="invalid-feedback">
@@ -60,6 +77,7 @@ const AppointmentPage = (props) => {
                 name="lastName"
                 placeholder=""
                 //   value=""
+                onChange={handleChange}
                 required
               />
               <div className="invalid-feedback">
@@ -75,7 +93,9 @@ const AppointmentPage = (props) => {
                 type="email"
                 className="form-control"
                 id="email"
+                name="email"
                 placeholder="you@example.com"
+                onChange={handleChange}
               />
               <div className="invalid-feedback">
                 Please enter a valid email address for shipping updates.
@@ -91,7 +111,9 @@ const AppointmentPage = (props) => {
                 type="tel"
                 className="form-control"
                 id="telephone"
+                name="telephone"
                 placeholder="XXX-XXX-XXXX"
+                onChange={handleChange}
                 pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
               />
               <div className="invalid-feedback">
@@ -107,47 +129,67 @@ const AppointmentPage = (props) => {
                 type="text"
                 className="form-control"
                 id="address"
+                name="address"
                 placeholder="1234 Main St, City"
+                onChange={handleChange}
               />
               <div className="invalid-feedback">Please enter your address.</div>
             </div>
-            <div className="row">
+            <div className="row ">
               <label className="form-label">
-                Choose a day and time for meeting:
+                Choose a day and then time for meeting:
               </label>
               <div className="col-sm-6">
-                <select
-                  className="form-control"
-                  id="timePicker"
-                  name="timePicker"
-                  required
-                >
-                  <option value="">Please choose a time</option>
-                  <option value="09:00 AM">09:00 AM</option>
-                  <option value="09:30 AM">09:30 AM</option>
-                  <option value="10:00 AM">10:00 AM</option>
-                  <option value="10:30 AM">10:30 AM</option>
-                </select>
-                <small>Office hours are 9:00am to 6:00pm</small>
+                <div className="input-group">
+                  <input
+                    type="date"
+                    className="form-control input-day"
+                    id="dayPicker"
+                    name="day"
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <small>Working week is Monday to Friday</small>
                 <div className="invalid-feedback">Valid time is required.</div>
               </div>
-
               <div className="col-sm-6">
-                <input
-                  type="date"
-                  className="form-control"
-                  id="dayPicker"
-                  name="dayPicker"
-                  required
-                />
-                <small>Working week is Monday to Friday</small>
-
+                <div className="input-group input-group-time">
+                  <select
+                    className="form-control select-time"
+                    id="timePicker"
+                    name="time"
+                    onChange={handleChange}
+                    // disabled="true"
+                    required
+                  >
+                    <option value="">Please choose a time from list</option>
+                    <option value="09:00 AM">09:00 AM</option>
+                    <option value="09:30 AM">09:30 AM</option>
+                    <option value="10:00 AM">10:00 AM</option>
+                    <option value="10:30 AM">10:30 AM</option>
+                  </select>
+                  <span className="input-group-text span-clock" id="basic-addon1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      className="bi bi-clock"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+                      <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+                    </svg>
+                  </span>
+                </div>
+                <small>Office hours are 9:00am to 6:00pm</small>
                 <div className="invalid-feedback">Valid time is required.</div>
               </div>
             </div>
             <div className="col-12">
               <label htmlFor="customerProblem" className="form-label">
-                What is a problem?{" "}
+                What is a problem?
                 <span className="text-muted">(Optional)</span>
               </label>
               <textarea
@@ -156,6 +198,7 @@ const AppointmentPage = (props) => {
                 name="customerProblem"
                 placeholder=" Please type your problem here.
                 For example, It looks like a rather blustery day, today."
+                onChange={handleChange}
                 rows="4"
                 cols="50"
               />
@@ -173,4 +216,20 @@ const AppointmentPage = (props) => {
   );
 };
 
-export default AppointmentPage;
+const mapStateToProps = (state) => {
+  return {
+    appointment: state.appointmentReducer.appointment,
+    isLoading: state.appointmentReducer.isLoading,
+    error: state.appointmentReducer.error,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    appointmentCreate: (credentials) => {
+      dispatch(appointmentCreate(credentials));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppointmentPage);

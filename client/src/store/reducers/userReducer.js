@@ -15,7 +15,7 @@ const initialState = {
 
 export const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case USER_LOADING: {
+    case USER_LOADING:
       return {
         ...state,
         user: {},
@@ -23,8 +23,7 @@ export const userReducer = (state = initialState, action) => {
         isLoading: true,
         error: null,
       };
-    }
-    case USER_GET: {
+    case USER_GET:
       return {
         ...state,
         user: action.user,
@@ -32,8 +31,7 @@ export const userReducer = (state = initialState, action) => {
         isLoading: false,
         error: null,
       };
-    }
-    case USER_ERROR: {
+    case USER_ERROR:
       return {
         ...state,
         user: {},
@@ -41,9 +39,7 @@ export const userReducer = (state = initialState, action) => {
         isLoading: false,
         error: action.errorMsg,
       };
-    }
-
-    case USER_LOGOUT: {
+    case USER_LOGOUT:
       return {
         ...state,
         user: {},
@@ -51,10 +47,8 @@ export const userReducer = (state = initialState, action) => {
         isLoading: false,
         error: null,
       };
-    }
-    case CHECK_AUTH: {
+    case CHECK_AUTH:
       return { ...state, isAuthorized: action.isAuthorized, error: null };
-    }
     default:
       return state;
   }

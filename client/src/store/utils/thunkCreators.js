@@ -5,6 +5,12 @@ import {
   errorUser,
   setAuth,
 } from "../actions/userActions";
+import {
+  getAppointment,
+  loadingAppointment,
+  errorAppointment,
+} from "../actions/appointmentAction";
+
 
 export const register = (credentials) => async (dispatch) => {
   try {
@@ -12,13 +18,9 @@ export const register = (credentials) => async (dispatch) => {
     const { data } = await $api.post("/user/register", credentials);
     localStorage.setItem("token", data?.accessToken);
 
-    setTimeout(() => {
-      // dispatch(setAuth(true));
-      dispatch(getUser(data?.user));
-    }, 500);
-
-    // await dispatch(setAuth(true));
-    // dispatch(getUser(data?.user));
+    // setTimeout(() => {
+    dispatch(getUser(data?.user));
+    // }, 500);
   } catch (err) {
     console.error(err);
     dispatch(errorUser({ error: err?.response.data.error || "Server Error" }));
@@ -29,16 +31,12 @@ export const login = (credentials) => async (dispatch) => {
   try {
     dispatch(loadingUser());
     const { data } = await $api.post("/user/login", credentials);
-    //?
     localStorage.setItem("token", data.accessToken);
-    //?
-    setTimeout(() => {
-      console.log("Timeout");
-      dispatch(setAuth(true));
-      dispatch(getUser(data?.user));
-    }, 3000);
-    // await dispatch(setAuth(true));
-    // dispatch(getUser(data?.user));
+    // setTimeout(() => {
+    //   console.log("Timeout");
+    dispatch(setAuth(true));
+    dispatch(getUser(data?.user));
+    // }, 3000);
   } catch (err) {
     console.error(err);
     dispatch(errorUser({ error: err?.response.data.error || "Server Error" }));
@@ -58,12 +56,24 @@ export const logout = () => async (dispatch) => {
 };
 
 export const checkAuth = () => async (dispatch) => {
-  // ? this.setLoading(true);
   try {
     const { data } = await $api.get("/user/refresh");
     await localStorage.setItem("token", data.accessToken);
     await dispatch(getUser(data.user));
     await dispatch(setAuth(true));
+  } catch (err) {
+    console.error(err);
+    dispatch(errorUser({ error: err?.response.data.error || "Server Error" }));
+  }
+};
+
+export const appointmentCreate = (credentials) => async (dispatch) => {
+  try {
+    dispatch(loadingAppointment());
+    const { data } = await $api.post("/appointment/create", credentials);
+    // setTimeout(() => {
+    dispatch(getAppointment(data?.appointment));
+    // }, 500);
   } catch (err) {
     console.error(err);
     dispatch(errorUser({ error: err?.response.data.error || "Server Error" }));

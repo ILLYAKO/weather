@@ -67,7 +67,7 @@ const LoginPage = (props) => {
 
 
 const mapStateToProps = (state) => {
-  console.log("state:", state);
+  // console.log("state:", state);
   return {
     user: state.userReducer.user,
     isLoading: state.userReducer.isLoading,

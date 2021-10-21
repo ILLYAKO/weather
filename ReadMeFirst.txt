@@ -50,3 +50,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 npm install react-router-dom
 
 npm install axios
+
+
+
+create Appointment
+read Appointment by appointment Id
+read Appointment by userId
+read Appointment by day
+read Appointment all
+update Appointment by appointment Id
+delete Appointment by appointment Id
