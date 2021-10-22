@@ -12,10 +12,10 @@ import { checkAuth } from "./store/utils/thunkCreators";
 import Sidebar from "./components/particles/Sidebar";
 import Footer from "./components/particles/Footer";
 import AppointmentPage from "./components/pages/AppointmentPage";
+import CalendarPage from "./components/pages/CalendarPage";
 
 function App(props) {
-
-  const {  checkAuth } = props;
+  const { checkAuth } = props;
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -46,6 +46,9 @@ function App(props) {
                 </Route>
                 <Route path="/appointment">
                   <AppointmentPage />
+                </Route>
+                <Route path="/calendar">
+                  <CalendarPage />
                 </Route>
               </Switch>
             </div>

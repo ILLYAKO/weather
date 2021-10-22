@@ -37,19 +37,30 @@ npx create-react-app .
 // install  React-Bootstrap in client folder
 cd client
 npm install react-bootstrap@next bootstrap@5.1.1
+// ? // npm i bootstrap-icons
+
+// add into src/index.js
+import "bootstrap/dist/css/bootstrap.min.css";
+
+// ? // add into src/index.css
+// ? // @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.1/font/bootstrap-icons.css");
 
 // Redux in client folder
 cd client
 npm install redux react-redux redux-thunk
 
-// add into src/index.js
-import "bootstrap/dist/css/bootstrap.min.css";
+
 
 
 //
+cd client
 npm install react-router-dom
-
+//
+cd client
 npm install axios
+//
+cd client
+npm install luxon
 
 
 

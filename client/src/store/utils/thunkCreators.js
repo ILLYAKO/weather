@@ -8,7 +8,7 @@ import {
 import {
   getAppointment,
   loadingAppointment,
-  errorAppointment,
+  // errorAppointment,
 } from "../actions/appointmentAction";
 
 

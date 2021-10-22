@@ -1,32 +1,37 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { appointmentCreate } from "../../../store/utils/thunkCreators";
-import './style.css'
+import "./style.css";
 
 const AppointmentPage = (props) => {
-  const { appointment, isLoading, error, appointmentCreate } = props;
-  // const form = useRef(null);
-  const [apointmentForm, setApointmentForm] = useState({});
+  const {
+    // appointment, isLoading, error,
+    appointmentCreate,
+  } = props;
+  const [appointmentForm, setAppointmentForm] = useState({});
+  const [isTimepikerActive, setIsTimepikerActive] = useState(false);
 
-  function handleChange(event) {
+  const handleDayChange = (event) => {
     const value = event.target.value;
-    setApointmentForm({
-      ...apointmentForm,
+    setAppointmentForm({
+      ...appointmentForm,
       [event.target.name]: value,
     });
-  }
+    setIsTimepikerActive(true);
+  };
+
+  const handleChange = (event) => {
+    const value = event.target.value;
+    setAppointmentForm({
+      ...appointmentForm,
+      [event.target.name]: value,
+    });
+  };
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-    // const aForm = new FormData(form.current);
-    // const appointment = JSON.stringify(Object.fromEntries(aForm));
-    const appointment = apointmentForm;
-    // // Display the key/value pairs
-    // for (var pair of appointmentForm.entries()) {
-    //   console.log(pair);
-    //   console.log(pair[0] + ": " + pair[1]);
-    // }
-    console.log("apointmentForm", apointmentForm);
+    const appointment = appointmentForm;
+    console.log("appointmentForm", appointmentForm);
     await appointmentCreate(appointment);
   };
 
@@ -43,7 +48,6 @@ const AppointmentPage = (props) => {
           className="needs-validation"
           id="appointmentFormId"
           name="appointmentForm"
-          // ref={form}
           onSubmit={onSubmitHandler}
         >
           <div className="row g-3">
@@ -87,7 +91,7 @@ const AppointmentPage = (props) => {
 
             <div className="col-12">
               <label htmlFor="email" className="form-label">
-                Email <span className="text-muted">(Optional)</span>
+                Email
               </label>
               <input
                 type="email"
@@ -96,6 +100,7 @@ const AppointmentPage = (props) => {
                 name="email"
                 placeholder="you@example.com"
                 onChange={handleChange}
+                required
               />
               <div className="invalid-feedback">
                 Please enter a valid email address for shipping updates.
@@ -146,46 +151,53 @@ const AppointmentPage = (props) => {
                     className="form-control input-day"
                     id="dayPicker"
                     name="day"
-                    onChange={handleChange}
+                    onChange={handleDayChange}
+                    min={new Date().toLocaleDateString("en-CA")}
                     required
                   />
                 </div>
                 <small>Working week is Monday to Friday</small>
                 <div className="invalid-feedback">Valid time is required.</div>
               </div>
-              <div className="col-sm-6">
-                <div className="input-group input-group-time">
-                  <select
-                    className="form-control select-time"
-                    id="timePicker"
-                    name="time"
-                    onChange={handleChange}
-                    // disabled="true"
-                    required
-                  >
-                    <option value="">Please choose a time from list</option>
-                    <option value="09:00 AM">09:00 AM</option>
-                    <option value="09:30 AM">09:30 AM</option>
-                    <option value="10:00 AM">10:00 AM</option>
-                    <option value="10:30 AM">10:30 AM</option>
-                  </select>
-                  <span className="input-group-text span-clock" id="basic-addon1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      className="bi bi-clock"
-                      viewBox="0 0 16 16"
+              {isTimepikerActive && (
+                <div className="col-sm-6">
+                  <div className="input-group input-group-time">
+                    <select
+                      className="form-control select-time"
+                      id="timePicker"
+                      name="time"
+                      onChange={handleChange}
+                      required
                     >
-                      <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
-                      <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
-                    </svg>
-                  </span>
+                      <option value="">Please choose a time from list</option>
+                      <option value="09:00 AM">09:00 AM</option>
+                      <option value="09:30 AM">09:30 AM</option>
+                      <option value="10:00 AM">10:00 AM</option>
+                      <option value="10:30 AM">10:30 AM</option>
+                    </select>
+                    <span
+                      className="input-group-text span-clock"
+                      id="basic-addon1"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        className="bi bi-clock"
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+                      </svg>
+                    </span>
+                  </div>
+                  <small>Office hours are 9:00am to 6:00pm</small>
+                  <div className="invalid-feedback">
+                    Valid time is required.
+                  </div>
                 </div>
-                <small>Office hours are 9:00am to 6:00pm</small>
-                <div className="invalid-feedback">Valid time is required.</div>
-              </div>
+              )}
             </div>
             <div className="col-12">
               <label htmlFor="customerProblem" className="form-label">
@@ -202,11 +214,9 @@ const AppointmentPage = (props) => {
                 rows="4"
                 cols="50"
               />
-
               <div className="invalid-feedback">Please enter your address.</div>
             </div>
           </div>
-
           <button className="w-100 btn btn-primary btn-lg mt-3" type="submit">
             Continue to booking
           </button>

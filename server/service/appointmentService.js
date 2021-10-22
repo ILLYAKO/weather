@@ -1,6 +1,10 @@
+const Appointment = require("../db/models/Appointment");
+
 class AppointmentService {
-  async create(appointment) {
-    console.log("AppointmentService.create", appointment);
+  async create(appointmentData) {
+    console.log("AppointmentService.create", appointmentData);
+    const appointment = await Appointment.create(appointmentData);
+    return appointment;
   }
 }
 module.exports = new AppointmentService();

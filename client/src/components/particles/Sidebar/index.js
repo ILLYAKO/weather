@@ -7,8 +7,8 @@ const Sidebar = () => {
       <Link to="/appointment" className="nav-link active" aria-current="page">
         Appointment
       </Link>
-      <Link to="/" className="nav-link">
-        Link
+      <Link to="/calendar" className="nav-link">
+        Calendar
       </Link>
       <Link to="/" className="nav-link">
         Link
