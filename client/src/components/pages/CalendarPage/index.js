@@ -3,58 +3,53 @@ import {
   DateTime,
   //  Info
 } from "luxon";
+import "./style.css";
 
 const CalendarPage = () => {
-  // const value = moment();
-  // const startDay = value.clone().startOf('month').startOf('week')
-  const startDay = DateTime.local().startOf("month").startOf("week");
-  // const endDay = value.clone().endOf("month").endOf("week");
-  const endDay = DateTime.local().endOf("month").endOf("week");
-
-  const day = startDay.minus({ day: 1 });
-  // const calendar = [];
+  const dayX = DateTime.local();
+  const startDay = dayX.startOf("month").startOf("week");
+  const endDay = dayX.endOf("month").endOf("week");
   const totalDays = 42;
   const calendar = [...Array(totalDays)].map((item, index) => {
-    return day.plus({ days: 1 + index });
+    return startDay.plus({ days:index });
   });
 
-
-  // if (day.startOf("day") <= endDay.startOf("day")) {
-  //   console.log("If true statement");
-  // } else {
-  //   console.log("Else false statement");
-  // }
-  // while (day.startOf("day") <= endDay.startOf("day")) {
-  //   console.log("HI");
-  //   calendar.push(
-  //     Array(7)
-  //       .fill(0)
-  //       .map(() => {
-  //         return day.plus({ days: 1 });
-  //       })
-  //   );
-  // }
-
   return (
-    <div>
-      <h3>CalendarPage</h3>
-      startDay: {startDay.toString()} - endDay: {endDay.toString()} <br />
-      day: {day.toString()}
+    <div className="container">
+      <h4>Today: {dayX.toString()}</h4>
+      <h5>{dayX.monthLong.toString()}</h5>
+
       <hr />
-      <p>{DateTime.now().startOf("month").startOf("week").toLocaleString()}</p>
-      <p>{typeof DateTime.now().startOf("month").toLocaleString()}</p>
-      {/* <p>{day}</p> */}
-      {DateTime.local().toString()}
-      {/* {DateTime.local({ zone: "America/New_York" })} */}
-      {/* {Info} */}
-      <hr />
-      {day.toString()}
-      <hr />
-      {calendar.map((item) => (
-        <p>{item.toFormat("d").toString()}</p>
-      ))}
-      <hr />
-      {day.toFormat("dd").toString()}
+      <div className="grid-wrapper-header ">
+        {[...Array(7)].map((_, index) => {
+          return (
+            <div
+              key={index}
+              className={`cell-wrapper-header bg-dark text-white pe-2`}
+            >
+              {DateTime.local(2021, 3, index + 1).weekdayLong}
+            </div>
+          );
+        })}
+      </div>
+      <div className="grid-wrapper">
+        {calendar.map((item) => (
+          <div
+            key={item}
+            className={`cell-wrapper  pe-2 ${
+              dayX.startOf("day").toString() === item.toString()
+                ? "bg-primary text-white"
+                : ["6", "7"].includes(item.weekday.toString())
+                ? "bg-danger text-white"
+                : item.month.toString() === dayX.month.toString()
+                ? "bg-secondary text-white"
+                : "bg-secondary "
+            } `}
+          >
+            {item.toFormat("d").toString()}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

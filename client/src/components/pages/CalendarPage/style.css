@@ -1,0 +1,26 @@
+.grid-wrapper-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  margin-bottom: 1px;
+}
+
+.cell-wrapper-header {
+  text-align: right;
+  min-width: 120px;
+  min-height: 32px;
+  /* background-color: aqua; */
+}
+
+.grid-wrapper {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+}
+
+.cell-wrapper {
+  text-align: right;
+  min-width: 120px;
+  min-height: 80px;
+  /* background-color: rgb(0, 196, 196); */
+}
