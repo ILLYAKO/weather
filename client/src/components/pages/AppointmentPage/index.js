@@ -170,10 +170,11 @@ const AppointmentPage = (props) => {
                       required
                     >
                       <option value="">Please choose a time from list</option>
+                      <option value="03:00 AM">03:00 AM</option>
                       <option value="09:00 AM">09:00 AM</option>
                       <option value="09:30 AM">09:30 AM</option>
-                      <option value="10:00 AM">10:00 AM</option>
-                      <option value="10:30 AM">10:30 AM</option>
+                      <option value="01:00 PM">01:00 PM</option>
+                      <option value="10:30 PM">10:30 PM</option>
                     </select>
                     <span
                       className="input-group-text span-clock"

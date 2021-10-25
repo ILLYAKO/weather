@@ -6,5 +6,9 @@ const router = new Router();
 
 /*  /appointment */
 router.post("/create", AppointmentController.create);
+//appointmentMonthly
+router.get("/:permonthday", AppointmentController.findPerMonth);
+
+
 
 module.exports = router;

@@ -10,6 +10,18 @@ class AppointmentController {
       next(e);
     }
   }
+
+  async findPerMonth(req, res, next) {
+    try {
+      const monthday = req.params.permonthday;
+      const appointments = await appointmentService.findPerMonth(monthday);
+      // console.log("server.appointmentController.monthday", monthday);
+      // console.log("appoint.length", appointments.length);
+      return res.json(appointments);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 module.exports = new AppointmentController();

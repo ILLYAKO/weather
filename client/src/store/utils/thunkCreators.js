@@ -1,4 +1,6 @@
 import $api from "./http";
+import { DateTime } from "luxon";
+
 import {
   loadingUser,
   getUser,
@@ -7,10 +9,10 @@ import {
 } from "../actions/userActions";
 import {
   getAppointment,
+  getAppointmentsPerMonth,
   loadingAppointment,
   // errorAppointment,
 } from "../actions/appointmentAction";
-
 
 export const register = (credentials) => async (dispatch) => {
   try {
@@ -70,10 +72,32 @@ export const checkAuth = () => async (dispatch) => {
 export const appointmentCreate = (credentials) => async (dispatch) => {
   try {
     dispatch(loadingAppointment());
-    const { data } = await $api.post("/appointment/create", credentials);
+
+    const { day, time, ...other } = credentials;
+    const appointTime = DateTime.fromJSDate(new Date(day + " " + time))
+      .toUTC()
+      .toString();
+    const credentialsData = { ...other, appointTime };
+    const { data } = await $api.post("/appointment/create", credentialsData);
     // setTimeout(() => {
     dispatch(getAppointment(data?.appointment));
     // }, 500);
+  } catch (err) {
+    console.error(err);
+    dispatch(errorUser({ error: err?.response.data.error || "Server Error" }));
+  }
+};
+
+export const appointmentsPerMonth = (dayX) => async (dispatch) => {
+  try {
+    // console.log("thunkCreator-day:", dayX.setLocale("en-ca").toLocaleString());
+
+    dispatch(loadingAppointment());
+    const { data } = await $api.get(
+      `/appointment/${dayX.setLocale("en-ca").toLocaleString()}`
+    );
+    // console.log("thunkCreator-data:", data);
+    dispatch(getAppointmentsPerMonth(data));
   } catch (err) {
     console.error(err);
     dispatch(errorUser({ error: err?.response.data.error || "Server Error" }));
