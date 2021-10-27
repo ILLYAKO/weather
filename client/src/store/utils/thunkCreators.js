@@ -80,7 +80,7 @@ export const appointmentCreate = (credentials) => async (dispatch) => {
     const credentialsData = { ...other, appointTime };
     const { data } = await $api.post("/appointment/create", credentialsData);
     // setTimeout(() => {
-    dispatch(getAppointment(data?.appointment));
+    dispatch(getAppointment(data));
     // }, 500);
   } catch (err) {
     console.error(err);
@@ -90,13 +90,10 @@ export const appointmentCreate = (credentials) => async (dispatch) => {
 
 export const appointmentsPerMonth = (dayX) => async (dispatch) => {
   try {
-    // console.log("thunkCreator-day:", dayX.setLocale("en-ca").toLocaleString());
-
     dispatch(loadingAppointment());
     const { data } = await $api.get(
       `/appointment/${dayX.setLocale("en-ca").toLocaleString()}`
     );
-    // console.log("thunkCreator-data:", data);
     dispatch(getAppointmentsPerMonth(data));
   } catch (err) {
     console.error(err);

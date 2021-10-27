@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { DateTime } from "luxon";
 import "./style.css";
 import { appointmentsPerMonth } from "../../../store/utils/thunkCreators";
+import AppointmentModal from "../../particles/AppointmentModal";
 
 const CalendarPage = (props) => {
   const [dayX, setDayX] = useState(DateTime.local().toUTC()); // important utc format
@@ -17,7 +18,6 @@ const CalendarPage = (props) => {
 
   useEffect(() => {
     appointmentsPerMonth(dayX);
-    // console.log("UE - appointments: ", appointments?.length);
     // eslint-disable-next-line
   }, [dayX]);
 
@@ -76,7 +76,6 @@ const CalendarPage = (props) => {
             viewBox="0 0 16 16"
             onClick={async () => {
               await setDayX((prevState) => prevState.plus({ months: 1 }));
-              // console.log("Click", dayX);
               // await appointmentsPerMonth(dayX);
             }}
           >
@@ -138,45 +137,40 @@ const CalendarPage = (props) => {
                 : "bg-secondary "
             } `}
           >
-            {item.toFormat("d").toString()}-x-{appointments.length}
-            {appointments
-              .filter(
-                (appointment) =>
-                  item.startOf("day").toString() ===
-                  DateTime.fromISO(appointment.appointTime, { zone: "utc" })
-                    .startOf("day")
-                    .toString()
-              )
-              .map((event) => (
-                <p>
-                  {DateTime.fromISO(event.appointTime, { zone: "utc" })
-                    .toLocal()
-                    .toFormat("t")
-                    .toString()}
-                </p>
-              ))}
+            <div class="d-flex flex-column">
+              {item.toFormat("d").toString()}
+              {appointments.filter(
+                  (appointment) =>
+                    item.startOf("day").toString() ===
+                    DateTime.fromISO(appointment.appointTime, { zone: "utc" })
+                      .startOf("day")
+                      .toString()
+                )
+                .map((event) => (
+                  <div key={event?._id}>
+                    <button
+                      type="button"
+                      className="btn bg-info"
+                      data-bs-toggle="modal"
+                      data-bs-target="#exampleModal"
+                    >
+                      {DateTime.fromISO(event.appointTime, { zone: "utc" })
+                        .toLocal()
+                        .toFormat("t")
+                        .toString()}
+                    </button>
+                    <AppointmentModal appointmentData={event} />
+                  </div>
+                ))}
+            </div>
           </div>
         ))}
       </div>
-
-      {/* // */}
-      {/* <!-- Button trigger modal --> */}
-      <button
-        type="button"
-        className="btn btn-primary"
-        data-bs-toggle="modal"
-        data-bs-target="#exampleModal"
-      >
-        Launch demo modal
-      </button>
-
-      {/* // */}
     </div>
   );
 };
 
 const mapStateToProps = (state) => {
-  // console.log("state:", state);
   return {
     appointment: state.appointmentReducer.appointment,
     appointments: state.appointmentReducer.appointments,

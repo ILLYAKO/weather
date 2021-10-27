@@ -3,13 +3,11 @@ const Appointment = require("../db/models/Appointment");
 
 class AppointmentService {
   async create(appointmentData) {
-    // console.log("AppointmentService.create", appointmentData);
     const appointment = await Appointment.create(appointmentData);
     return appointment;
   }
 
   async findPerMonth(monthday) {
-    // console.log("server.AppointmentService.monthday", monthday);
     const appointments = await Appointment.find({
       appointTime: {
         $gte: DateTime.fromJSDate(new Date(monthday + " 00:00 AM"))

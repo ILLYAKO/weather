@@ -25,6 +25,7 @@ export const appointmentReducer = (state = initialState, action) => {
       return {
         ...state,
         appointment: action.appointment,
+        appointments: [],
         isLoading: false,
         error: null,
       };

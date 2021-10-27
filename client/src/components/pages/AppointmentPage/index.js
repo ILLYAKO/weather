@@ -1,9 +1,13 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+
 import { connect } from "react-redux";
 import { appointmentCreate } from "../../../store/utils/thunkCreators";
 import "./style.css";
 
 const AppointmentPage = (props) => {
+  let history = useHistory();
+
   const {
     // appointment, isLoading, error,
     appointmentCreate,
@@ -31,8 +35,9 @@ const AppointmentPage = (props) => {
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     const appointment = appointmentForm;
-    console.log("appointmentForm", appointmentForm);
     await appointmentCreate(appointment);
+    history.push("/");
+    console.log("after useHistory");
   };
 
   return (
