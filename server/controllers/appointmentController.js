@@ -20,6 +20,16 @@ class AppointmentController {
       next(e);
     }
   }
+
+  async findPerDay(req, res, next) {
+    try {
+      const day = req.params.perday;
+      const appointments = await appointmentService.findPerDay(day);
+      return res.json(appointments);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 module.exports = new AppointmentController();

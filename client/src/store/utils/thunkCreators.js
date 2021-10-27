@@ -9,7 +9,8 @@ import {
 } from "../actions/userActions";
 import {
   getAppointment,
-  getAppointmentsPerMonth,
+  getappointmentsFindPerDay,
+  getappointmentsFindPerMonth,
   loadingAppointment,
   // errorAppointment,
 } from "../actions/appointmentAction";
@@ -88,13 +89,26 @@ export const appointmentCreate = (credentials) => async (dispatch) => {
   }
 };
 
-export const appointmentsPerMonth = (dayX) => async (dispatch) => {
+export const appointmentsFindPerDay = (dayZ) => async (dispatch) => {
   try {
     dispatch(loadingAppointment());
     const { data } = await $api.get(
-      `/appointment/${dayX.setLocale("en-ca").toLocaleString()}`
+      `/appointment/day/${dayZ.setLocale("en-ca").toLocaleString()}`
     );
-    dispatch(getAppointmentsPerMonth(data));
+    dispatch(getappointmentsFindPerDay(data));
+  } catch (err) {
+    console.error(err);
+    dispatch(errorUser({ error: err?.response.data.error || "Server Error" }));
+  }
+};
+
+export const appointmentsFindPerMonth = (dayX) => async (dispatch) => {
+  try {
+    dispatch(loadingAppointment());
+    const { data } = await $api.get(
+      `/appointment/month/${dayX.setLocale("en-ca").toLocaleString()}`
+    );
+    dispatch(getappointmentsFindPerMonth(data));
   } catch (err) {
     console.error(err);
     dispatch(errorUser({ error: err?.response.data.error || "Server Error" }));

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import { DateTime } from "luxon";
 import "./style.css";
-import { appointmentsPerMonth } from "../../../store/utils/thunkCreators";
+import { appointmentsFindPerMonth } from "../../../store/utils/thunkCreators";
 import AppointmentModal from "../../particles/AppointmentModal";
 
 const CalendarPage = (props) => {
@@ -14,16 +14,15 @@ const CalendarPage = (props) => {
     return startDay.plus({ days: index });
   });
 
-  const { appointmentsPerMonth, appointments } = props;
+  const { appointmentsFindPerMonth, appointments } = props;
 
   useEffect(() => {
-    appointmentsPerMonth(dayX);
+    appointmentsFindPerMonth(dayX);
     // eslint-disable-next-line
   }, [dayX]);
 
   return (
     <div className="container">
-      {/* {appointments?.map((item) => <p>{item.appointTime}</p>)} */}
       <div className="calendar-header bg-dark text-white ">
         <div>
           <svg
@@ -76,7 +75,6 @@ const CalendarPage = (props) => {
             viewBox="0 0 16 16"
             onClick={async () => {
               await setDayX((prevState) => prevState.plus({ months: 1 }));
-              // await appointmentsPerMonth(dayX);
             }}
           >
             <path
@@ -137,9 +135,10 @@ const CalendarPage = (props) => {
                 : "bg-secondary "
             } `}
           >
-            <div class="d-flex flex-column">
+            <div className="d-flex flex-column">
               {item.toFormat("d").toString()}
-              {appointments.filter(
+              {appointments
+                .filter(
                   (appointment) =>
                     item.startOf("day").toString() ===
                     DateTime.fromISO(appointment.appointTime, { zone: "utc" })
@@ -181,8 +180,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    appointmentsPerMonth: (dayX) => {
-      dispatch(appointmentsPerMonth(dayX));
+    appointmentsFindPerMonth: (dayX) => {
+      dispatch(appointmentsFindPerMonth(dayX));
     },
   };
 };

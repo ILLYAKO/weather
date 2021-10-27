@@ -22,6 +22,24 @@ class AppointmentService {
     });
     return appointments;
   }
+  
+  async findPerDay(dayZ) {
+    const appointments = await Appointment.find({
+      appointTime: {
+        $gte: DateTime.fromJSDate(new Date(dayZ + " 00:00 AM"))
+          .startOf("day")
+          .toUTC()
+          .toString(),
+        $lte: DateTime.fromJSDate(new Date(dayZ + " 00:00 AM"))
+          .endOf("day")
+          .toUTC()
+          .toString(),
+      },
+    })
+      .select("appointTime")
+      .distinct("appointTime")
+    return appointments;
+  }
 }
 
 module.exports = new AppointmentService();

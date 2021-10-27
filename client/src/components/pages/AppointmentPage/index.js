@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-
 import { connect } from "react-redux";
-import { appointmentCreate } from "../../../store/utils/thunkCreators";
+import { DateTime } from "luxon";
+
+import {
+  appointmentCreate,
+  appointmentsFindPerDay,
+} from "../../../store/utils/thunkCreators";
 import "./style.css";
 
 const AppointmentPage = (props) => {
@@ -11,17 +15,56 @@ const AppointmentPage = (props) => {
   const {
     // appointment, isLoading, error,
     appointmentCreate,
+    appointmentsFindPerDay,
+    appointments,
   } = props;
+
   const [appointmentForm, setAppointmentForm] = useState({});
   const [isTimepikerActive, setIsTimepikerActive] = useState(false);
+  const [appointmentsTimeList, setAppointmentsTimeList] = useState([]);
 
-  const handleDayChange = (event) => {
+  console.log("appointmentsTimeList:", appointmentsTimeList);
+
+  const handleDayChange = async (event) => {
     const value = event.target.value;
     setAppointmentForm({
       ...appointmentForm,
       [event.target.name]: value,
     });
+    await appointmentsFindPerDay(DateTime.fromISO(value));
+    setAppointmentsTimeList(setTimeList(value));
     setIsTimepikerActive(true);
+  };
+
+  const setTimeList = (day) => {
+    const startTime = DateTime.fromJSDate(new Date(day.concat(" 9:00 AM")));
+    const appointmentsTotal = 9 * 4;
+    const arrayTemp = [...Array(appointmentsTotal)].map((item, index) => {
+      return startTime
+        .plus({ minutes: index * 15 })
+        .toLocaleString(DateTime.TIME_SIMPLE);
+    });
+
+    return arrayTemp;
+  };
+
+  const setSelectOptions = (appointments, appointmentsTimeList) => {
+    const appointmentsTimeOnly = appointments.map((item) =>
+      DateTime.fromISO(item).toLocaleString(DateTime.TIME_SIMPLE)
+    );
+
+    return (
+      <>
+        <option value="">Please choose a time from list</option>{" "}
+        {appointmentsTimeList
+          ?.filter((item) => !appointmentsTimeOnly.includes(item))
+          .map((item, i) => (
+            <option key={i} value={item.toLocaleString(DateTime.TIME_SIMPLE)}>
+              {item.toLocaleString(DateTime.TIME_SIMPLE)}
+            </option>
+          ))}
+      </>
+    );
   };
 
   const handleChange = (event) => {
@@ -37,7 +80,6 @@ const AppointmentPage = (props) => {
     const appointment = appointmentForm;
     await appointmentCreate(appointment);
     history.push("/");
-    console.log("after useHistory");
   };
 
   return (
@@ -48,7 +90,6 @@ const AppointmentPage = (props) => {
       </div>
 
       <div className="col-md-7 col-lg-8 ">
-        {/* <form className="needs-validation" novalidate> */}
         <form
           className="needs-validation"
           id="appointmentFormId"
@@ -174,12 +215,7 @@ const AppointmentPage = (props) => {
                       onChange={handleChange}
                       required
                     >
-                      <option value="">Please choose a time from list</option>
-                      <option value="03:00 AM">03:00 AM</option>
-                      <option value="09:00 AM">09:00 AM</option>
-                      <option value="09:30 AM">09:30 AM</option>
-                      <option value="01:00 PM">01:00 PM</option>
-                      <option value="10:30 PM">10:30 PM</option>
+                      {setSelectOptions(appointments, appointmentsTimeList)}
                     </select>
                     <span
                       className="input-group-text span-clock"
@@ -235,6 +271,7 @@ const AppointmentPage = (props) => {
 const mapStateToProps = (state) => {
   return {
     appointment: state.appointmentReducer.appointment,
+    appointments: state.appointmentReducer.appointments,
     isLoading: state.appointmentReducer.isLoading,
     error: state.appointmentReducer.error,
   };
@@ -244,6 +281,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     appointmentCreate: (credentials) => {
       dispatch(appointmentCreate(credentials));
+    },
+    appointmentsFindPerDay: (day) => {
+      dispatch(appointmentsFindPerDay(day));
     },
   };
 };

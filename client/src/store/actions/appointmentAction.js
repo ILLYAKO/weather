@@ -1,6 +1,7 @@
 import {
   APPOINTMENT_GET,
-  APPOINTMENT_MONTHLY_GET,
+  APPOINTMENTS_DAILY_GET,
+  APPOINTMENTS_MONTHLY_GET,
   APPOINTMENT_LOADING,
   APPOINTMENT_ERROR,
 } from "./types";
@@ -11,9 +12,15 @@ export const getAppointment = (appointment) => {
     appointment,
   };
 };
-export const getAppointmentsPerMonth = (appointments) => {
+export const getappointmentsFindPerDay = (appointments) => {
   return {
-    type: APPOINTMENT_MONTHLY_GET,
+    type: APPOINTMENTS_DAILY_GET,
+    appointments,
+  };
+};
+export const getappointmentsFindPerMonth = (appointments) => {
+  return {
+    type: APPOINTMENTS_MONTHLY_GET,
     appointments,
   };
 };

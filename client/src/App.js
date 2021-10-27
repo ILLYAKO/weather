@@ -58,10 +58,6 @@ function App(props) {
           <Footer />
         </div>
       </div>
-      {/* // */}
-     
-
-      {/* // */}
     </Router>
   );
 }

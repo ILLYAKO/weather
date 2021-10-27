@@ -1,6 +1,7 @@
 import {
   APPOINTMENT_GET,
-  APPOINTMENT_MONTHLY_GET,
+  APPOINTMENTS_DAILY_GET,
+  APPOINTMENTS_MONTHLY_GET,
   APPOINTMENT_LOADING,
   APPOINTMENT_ERROR,
 } from "../actions/types";
@@ -18,6 +19,7 @@ export const appointmentReducer = (state = initialState, action) => {
       return {
         ...state,
         appointment: {},
+        appointments: [],
         isLoading: true,
         error: null,
       };
@@ -29,7 +31,7 @@ export const appointmentReducer = (state = initialState, action) => {
         isLoading: false,
         error: null,
       };
-    case APPOINTMENT_MONTHLY_GET:
+    case APPOINTMENTS_DAILY_GET:
       return {
         ...state,
         appointment: {},
@@ -37,6 +39,15 @@ export const appointmentReducer = (state = initialState, action) => {
         isLoading: false,
         error: null,
       };
+    case APPOINTMENTS_MONTHLY_GET:
+      return {
+        ...state,
+        appointment: {},
+        appointments: action.appointments,
+        isLoading: false,
+        error: null,
+      };
+
     case APPOINTMENT_ERROR:
       return {
         ...state,
